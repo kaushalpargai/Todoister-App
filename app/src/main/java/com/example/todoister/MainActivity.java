@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.todoister.Model.Priority;
 import com.example.todoister.Model.Task;
 import com.example.todoister.Model.TaskViewModel;
+import com.example.todoister.adapter.OnTodoClickListener;
 import com.example.todoister.adapter.RecyclerViewAdapter;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -29,7 +30,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.Calendar;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnTodoClickListener {
 
     private TaskViewModel taskViewModel;
     private RecyclerView recyclerView;
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         taskViewModel.getAllTasks().observe(this, new Observer<List<Task>>() {
             @Override
             public void onChanged(List<Task> tasks) {
-               recyclerViewAdapter=new RecyclerViewAdapter(tasks);
+               recyclerViewAdapter=new RecyclerViewAdapter(tasks,MainActivity.this);
                recyclerView.setAdapter(recyclerViewAdapter);
             }
         });
@@ -104,5 +105,10 @@ public class MainActivity extends AppCompatActivity {
 //        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onTodoClick(int adapterposition, Task task) {
+        Log.d("Click", "onTodoClick: "+task.getTask());
     }
 }
