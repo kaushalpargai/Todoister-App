@@ -15,8 +15,10 @@ import android.widget.RadioGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.Group;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.todoister.Model.Priority;
+import com.example.todoister.Model.SharedViewModel;
 import com.example.todoister.Model.Task;
 import com.example.todoister.Model.TaskViewModel;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -37,6 +39,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Vi
     private Group calendarGroup;
     private Date dueDate;
     Calendar calendar=Calendar.getInstance();
+    private SharedViewModel sharedViewModel;
 
 
 
@@ -73,6 +76,15 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Vi
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        sharedViewModel=new ViewModelProvider(requireActivity())
+                .get(SharedViewModel.class);
+
+
+        if(sharedViewModel.getSelectedItem().getValue() != null){
+            Task task = sharedViewModel.getSelectedItem().getValue();
+            Log.d("My", "onViewCreated: " + task.getTask());
+
+        }
 
         calendarButton.setOnClickListener(new View.OnClickListener() {
             @Override

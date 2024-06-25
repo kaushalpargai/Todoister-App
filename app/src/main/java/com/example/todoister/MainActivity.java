@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.todoister.Model.Priority;
+import com.example.todoister.Model.SharedViewModel;
 import com.example.todoister.Model.Task;
 import com.example.todoister.Model.TaskViewModel;
 import com.example.todoister.adapter.OnTodoClickListener;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements OnTodoClickListen
     private RecyclerViewAdapter recyclerViewAdapter;
     private int counter=0;
     private BottomSheetFragment bottomSheetFragment;
+    private SharedViewModel sharedViewModel;
 
 
     @Override
@@ -66,6 +68,9 @@ public class MainActivity extends AppCompatActivity implements OnTodoClickListen
             }
         });
 
+        sharedViewModel=new ViewModelProvider(this).get(SharedViewModel.class);
+
+
 
         FloatingActionButton fab = findViewById(R.id.fab);
 
@@ -78,10 +83,7 @@ public class MainActivity extends AppCompatActivity implements OnTodoClickListen
                 showBottomSheetDialog();
             }
 
-            private void showBottomSheetDialog() {
-                bottomSheetFragment.show(getSupportFragmentManager(),bottomSheetFragment.getTag());
 
-            }
         });
     }
 
@@ -108,7 +110,11 @@ public class MainActivity extends AppCompatActivity implements OnTodoClickListen
     }
 
     @Override
-    public void onTodoClick(int adapterposition, Task task) {
+    public void onTodoClick( Task task) {
+
+        sharedViewModel.selectedItem(task);
+        showBottomSheetDialog();
+
 //         Log.d("Click", "onTodoClick: "+task.getTask());
     }
 
@@ -118,4 +124,10 @@ public class MainActivity extends AppCompatActivity implements OnTodoClickListen
         recyclerViewAdapter.notifyDataSetChanged();
 
     }
+
+    private void showBottomSheetDialog() {
+        bottomSheetFragment.show(getSupportFragmentManager(),bottomSheetFragment.getTag());
+
+    }
 }
+
