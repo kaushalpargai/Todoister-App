@@ -113,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements OnTodoClickListen
     public void onTodoClick( Task task) {
 
         sharedViewModel.selectedItem(task);
+        sharedViewModel.setIsEdit(true);
         showBottomSheetDialog();
 
 //         Log.d("Click", "onTodoClick: "+task.getTask());
