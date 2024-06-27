@@ -21,8 +21,10 @@ import com.example.todoister.Model.Priority;
 import com.example.todoister.Model.SharedViewModel;
 import com.example.todoister.Model.Task;
 import com.example.todoister.Model.TaskViewModel;
+import com.example.todoister.Util.Utils;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -101,8 +103,9 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Vi
 
         calendarButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view1) {
                 calendarGroup.setVisibility(calendarGroup.getVisibility() == View.GONE ? View.VISIBLE :View.GONE  );
+                Utils.hideSoftKeyboard(view1);
             }
         });
 
@@ -136,6 +139,13 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Vi
                             } else {
                                 TaskViewModel.insert(myTask);
                             }
+                            if(BottomSheetFragment.this.isVisible()){
+                                BottomSheetFragment.this.dismiss();
+
+                            }
+                        }
+                        else{
+                            Snackbar.make(saveButton,R.string.empty_field,Snackbar.LENGTH_LONG).show();
                         }
 
             }
