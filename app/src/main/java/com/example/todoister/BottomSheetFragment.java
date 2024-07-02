@@ -43,6 +43,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Vi
     Calendar calendar=Calendar.getInstance();
     private SharedViewModel sharedViewModel;
     private boolean isEdit;
+    private Priority priority;
 
 
 
@@ -120,19 +121,56 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Vi
 
             }
         });
+
+        priorityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.hideSoftKeyboard(v);
+                priorityRadioGroup.setVisibility(
+                        priorityRadioGroup.getVisibility() == View.GONE ? View.VISIBLE :View.GONE);
+                priorityRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(RadioGroup group, int checkedId) {
+                        if( priorityRadioGroup.getWindowVisibility() == View.VISIBLE ){
+                            selectedButtonId = checkedId;
+                            selectedRadioButton = view.findViewById(selectedButtonId);
+
+                            if (selectedRadioButton.getId()==R.id.radioButton_high){
+                                priority = Priority.HIGH;
+
+                            } else if (selectedRadioButton.getId() == R.id.radioButton_med) {
+                                priority = Priority.MEDIUM;
+
+                            } else if (selectedRadioButton.getId() == R.id.radioButton_low) {
+                                priority = Priority.LOW;
+
+                            } else{
+                                priority = Priority.LOW;
+                            }
+
+                        }else{
+                            priority=Priority.LOW;
+
+                        }
+                    }
+                });
+
+            }
+
+        });
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                         String task=enterTodo.getText().toString().trim();
-                        if(!TextUtils.isEmpty(task) && dueDate!=null) {
-                            Task myTask = new Task(task, Priority.HIGH, dueDate, Calendar.getInstance().getTime(), false);
+                        if(!TextUtils.isEmpty(task) && dueDate!=null && priority !=null) {
+                            Task myTask = new Task(task, priority, dueDate, Calendar.getInstance().getTime(), false);
 
 
                             if (isEdit) {
                                 Task updateTask = sharedViewModel.getSelectedItem().getValue();
                                 updateTask.setTask(task);
                                 updateTask.setIsCreated(Calendar.getInstance().getTime());
-                                updateTask.setPriorirty(Priority.HIGH);
+                                updateTask.setPriorirty(priority);
                                 updateTask.setDueDate(dueDate);
                                 TaskViewModel.update(updateTask);
                                 sharedViewModel.setIsEdit(false);
